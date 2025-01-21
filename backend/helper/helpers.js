@@ -6,10 +6,8 @@ const db = initDatabase();
     try {
       const [result] = await db.execute(query);
 
-      console.log("result",result);
-      
       // Calculate the inserted IDs for each row
-      const insertedIds = [];
+      const insertedIds = {};
       const insertIdStart = result.insertId; // Start ID from the first inserted row
       const affectedRows = result.affectedRows;
 

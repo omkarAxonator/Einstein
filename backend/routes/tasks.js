@@ -7,7 +7,7 @@ const helper = require('../helper/helpers')
   router.post('/addNewRows', async (req, res) => {
     try {
       
-      const { table_name, columns, values } = req.body;
+      const { table_name, columns, values,onlyValues } = req.body;
 
       // Validate the request body
       if (!table_name || !Array.isArray(columns) || !Array.isArray(values)) {
@@ -16,12 +16,10 @@ const helper = require('../helper/helpers')
 
       // Construct column names and values string for SQL query
       const column_names = `(${columns.join(", ")})`;
-      let VALUES = []
       const values_string = values
         .map(valueRow => {
           return `(${valueRow
             .map(val => {
-              VALUES.push(val); // Ensure the value is pushed to the array
               return typeof val === 'string' ? `'${val}'` : val; // Format value
             })
             .join(", ")})`;
@@ -29,12 +27,8 @@ const helper = require('../helper/helpers')
         .join(", ");
 
       // Call the helper function to insert rows
-      console.log("values",VALUES);
-      
-      // const response = await helper.addNewRow(table_name, column_names, values_string,VALUES);
-      console.log("response",response);
-      
-      res.status(200).json({ message: `Inserted new rows into ${table_name}` });
+      const response = await helper.addNewRow(table_name, column_names, values_string,onlyValues);
+      res.status(200).json(response);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Failed to insert rows into the database." });
@@ -195,7 +189,6 @@ const helper = require('../helper/helpers')
       
       const id = req.params.id;
       const { deleteChildren } = req.body; // Add a parameter to check if child tasks should be deleted
-      console.log("alo",deleteChildren);
       let table_name = 'task';
       let column_name = 'task_id';
 

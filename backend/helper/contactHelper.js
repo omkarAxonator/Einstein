@@ -107,7 +107,6 @@ async function add_new_contact(request) {
         email, first_name, last_name, assigned_to, lead_source, company_name, job_title,
         phone_number, linked_in, city_id, state_id, country_id, industry_id, website
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    console.log("values",values);
     
     try {
         const [result] = await db.execute(query, values);
