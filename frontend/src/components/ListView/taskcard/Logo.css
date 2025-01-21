@@ -1,0 +1,10 @@
+.logo-img {
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition for effects */
+  }
+  
+  .logo-img:hover {
+    transform: scale(1.1); /* Slight zoom-in effect */
+    opacity: 0.8; /* Slight transparency */
+    border-color: #007bff; /* Change border color on hover */
+  }
+  

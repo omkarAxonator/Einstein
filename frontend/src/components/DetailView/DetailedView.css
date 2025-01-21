@@ -1,0 +1,26 @@
+.task-data-Detailedcontainer {
+  overflow: hidden;
+  max-height: 100px; /* Initial height */
+  transition: max-height 0.5s ease-in-out; /* Smooth animation for expansion */
+  cursor: pointer;
+  position: relative;
+}
+
+.task-data-Detailedcontainer.expanded {
+  max-height: 1000px; /* Large enough value to accommodate the content */
+}
+
+.task-data-Detailedcontainer:before {
+  content: "Click to expand";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: #007bff;
+  display: none;
+}
+
+.task-data-Detailedcontainer:not(.expanded):before {
+  display: block; /* Show the hint only when collapsed */
+}

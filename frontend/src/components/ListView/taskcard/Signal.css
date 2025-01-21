@@ -1,0 +1,49 @@
+.signal-light {
+  width: 40px;
+  height: 40px;
+  margin: 5px 0;
+  border-radius: 50%;
+  background-color: gray;
+  border: 2px solid #000;
+  opacity: 0.3; /* Default opacity for inactive lights */
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+#signalBox {
+  height: fit-content;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.signal-light.red {
+  background-color: rgba(255, 0, 0, 1);
+}
+
+.signal-light.yellow {
+  background-color: rgba(255, 255, 0, 1);
+}
+
+.signal-light.green {
+  background-color: rgba(0, 128, 0, 1);
+}
+
+.signal-light.glow {
+  opacity: 1; /* Full opacity for the active light */
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 1); /* Glow effect */
+}
+
+/* Responsive design */
+@media (max-width: 576px) {
+  .signal-light {
+    width: 20px;
+    height: 20px;
+  }
+  #signalBox {
+    padding: 8px;
+  }
+}

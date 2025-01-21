@@ -1,0 +1,46 @@
+/* src/components/Navbar.css */
+
+/* Style the company logo */
+.navbar-logo {
+    height: 40px; /* Adjust the size of the logo */
+    width: auto;
+  }
+  
+  /* Styling for the search bar */
+  .search-container {
+    flex-grow: 1;
+    max-width: 600px;
+  }
+  
+  .search-input {
+    border-radius: 25px;
+    padding: 8px 15px;
+  }
+  
+  /* Styling for the user image */
+  .user-avatar img {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border: 2px solid #fff;
+    margin-left: 15px;
+  }
+  
+  /* Notification icon */
+  .btn-link {
+    color: #333;
+  }
+  
+
+
+
+
+  .search-results {
+    margin-top: 20px;
+  }
+  .search-results div {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
