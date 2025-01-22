@@ -37,7 +37,7 @@ const SingleView = () => {
   
 async function getTaskDetails() {
     try {
-        const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/api/tasks/${taskId}`, {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/tasks/${taskId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ async function getTaskDetails() {
   // Fetch function to call the API
   async function fetchtabs() {
     try {
-        const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/api/tasks/get_tabs`, {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/tasks/get_tabs`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

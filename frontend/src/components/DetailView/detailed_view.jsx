@@ -8,6 +8,8 @@ import FormComponent from "../form/From";
 import { getcustomFields } from "../../helper/helper";
 
 const Detailed_View = ({ taskDetails, customfields,refreshDetailedView }) => {
+  console.log("details",customfields);
+  
   taskDetails.custom_fields = customfields;  
   const [showDeletePopup, setShowModal] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -77,8 +79,8 @@ const columns = Array.from({ length: columnCount }, (_, index) =>
             <LogoBox company_name={isCustomFieldAvailable("Company",customfields)} company_website={trimmedWebsite}/>
         </div>
         <div className="col-md-8 ps-3">
-          <h4 className="m-0"><a className="text-decoration-none" href={customfields['Company Website']}>{taskDetails.task_name}</a> </h4>
-          <small className="text-muted">{isCustomFieldAvailable("Company",customfields)} - Owner</small>
+          <h4 className="m-0"><a className="text-decoration-none" href={isCustomFieldAvailable("Company Website",customfields)}>{taskDetails.task_name}</a> </h4>
+          <small className="text-muted">{taskDetails.parent_task_name == "Root" ? "" : taskDetails.parent_task_name}</small>
         </div>
         <div className="col-md-3 text-end">
           {Object.keys(customfields)==0?null:<span className={`badge bg-${customfields["Health"].value.toLowerCase()} me-2`}>{customfields['Health'].value}</span>}

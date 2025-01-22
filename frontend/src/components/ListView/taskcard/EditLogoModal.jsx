@@ -29,10 +29,10 @@ function EditLogoModal({ task, show, onClose }) {
     try {
       if (Object.keys(customFields).length > 0) {
         // Update task custom field
-        const response = await axios.post(`${import.meta.env.VITE_LOCAL_URL}/api/tasks/updateTaskCustomFields/${task.task_id}`, { newId:customSrc ,customFieldId:23});
+        const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/tasks/updateTaskCustomFields/${task.task_id}`, { newId:customSrc ,customFieldId:23});
       } else {
         // Add new custom fields
-        const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/api/tasks/addTaskCustomFields`, {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/tasks/addTaskCustomFields`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
