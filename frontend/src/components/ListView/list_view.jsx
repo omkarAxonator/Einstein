@@ -37,7 +37,7 @@ const Listview = ({taskTypeCode,filtertasktype,parenntId,selectedTabId,selectedT
     setError('');
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/api/tasks/get_scope`, {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/tasks/get_scope`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
