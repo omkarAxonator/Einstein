@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function DeletePopup({ task, fetchTasks, onclose }) {
-  console.log("task",task);
-  
   const [deleteChildren, setDeleteChildren] = useState(false); // State to track the checkbox
 
   const handleDelete = async () => {

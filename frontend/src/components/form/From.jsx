@@ -18,6 +18,8 @@ function FormComponent({ toggleModal,refreshTasks,parent_task_id,selectedTabId, 
     "parent_task_id":parent_task_id
   })
 
+  const requiredFields = ['Health','Status']
+
   const [statuses, setStatuses] = useState([]); // For storing statuses list
   // const [selectedStatus, setSelectedStatus] = useState("");
   // const [selectedStatusid, setSelectedStatusid] = useState(0);
@@ -124,8 +126,6 @@ useEffect(() => {
   };
 
   const handlecustomSelect = (id,selected_id) => {
-    console.log("ids",id,selected_id);
-    
     setCustomFields((prevData)=>{return {...prevData,[id]:selected_id}})
 
   };
@@ -142,8 +142,6 @@ useEffect(() => {
 
   // Update custom field state
   const handleCustomFieldChange = (fieldId, value) => {
-    console.log("changes",fieldId,value);
-    
     setCustomFields((prevFields) => ({
       ...prevFields,
       [fieldId]: value,
@@ -165,26 +163,34 @@ useEffect(() => {
     let addNewlookup = {
       "table_name": "lookup",
       "columns": ["fk_custom_field_id", "`option`"],
-      "values": []
+      "values": [],
+      "onlyValues":[]
     };
   
     Object.entries(customFields).forEach(([key, value]) => {
       if (typeof value === "string") {
         let newValue = [key, value];
         addNewlookup['values'].push(newValue);
+        addNewlookup['onlyValues'].push(value);
+
       }
     });
   
     if (addNewlookup['values'].length > 0) {
       try {
         const response = await axios.post(`${import.meta.env.VITE_LOCAL_URL}/api/tasks/addNewRows`, addNewlookup);
-        console.log(response.data);
+        // Replace `customFields` values with corresponding IDs
+        const responseMapping = response.data;
+        Object.entries(customFields).forEach(([key, value]) => {
+          if (responseMapping[value]) {
+            customFields[key] = responseMapping[value];
+          }
+        });
+
       } catch (error) {
         console.error("Error in submitting task:", error);
       }
     }
-
-    return
 
     try {
       const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/api/tasks/add_task`, {
@@ -204,6 +210,8 @@ useEffect(() => {
       if (Object.keys(customFields).length>0) {
         try {
           customFields["newTaskId"]=newTaskId
+          console.log("custom fields",customFields);
+          
           const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/api/tasks/addTaskCustomFields`, {
             method: "POST",
             headers: {
@@ -232,7 +240,7 @@ useEffect(() => {
       }
     } catch (error) {
       console.error("Error adding task:", error);
-      alert(`Failed to add task: ${response.status}`);
+      alert(`Failed to add task: ${error}`);
     }
   };
 
@@ -322,6 +330,7 @@ useEffect(() => {
                 id_column="status_id"
                 id="statusId"
                 preselectedId={formData.statusId}
+                required ={true}
               />
 
               {/* Render dynamic custom fields */}
@@ -372,6 +381,7 @@ useEffect(() => {
                     id={field.custom_field_id}
                     // preselectedId ={taskToEdit?taskToEdit.custom_fields[field.display_name_singular].lookupId:false}
                     preselectedId={customFields[field.custom_field_id] || null}
+                    required = {requiredFields.includes(field.display_name_singular)}
                   />
                   )}
                   {field.type === "date" && (

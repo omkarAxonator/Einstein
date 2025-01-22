@@ -9,6 +9,7 @@ function Dropdown({
   id_column,
   id,
   preselectedId = false,
+  required=false
 }) {
   const [selectedOption, setSelectedOption] = useState("");
   const [showTextField, setShowTextField] = useState(false);
@@ -63,6 +64,7 @@ function Dropdown({
         className="form-select"
         value={selectedOption || ""}
         onChange={handleChange}
+        required = {required}
       >
         <option value="" disabled>
           {option_label}

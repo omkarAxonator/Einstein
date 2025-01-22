@@ -162,7 +162,8 @@ async function addNewTask(fields) {
   const nextordernumber = currentorderNumber + 1000;
 
   const query = `INSERT INTO task (display_name, task_data, fk_task_type_id, fk_status_id, order_number, parent_task_id) VALUES ("${display_name}", "${task_data}", ${task_type_id}, ${status_id}, ${nextordernumber}, ${parentId});`;
-
+  console.log("query",query);
+  
   // update counter
   const columnValues = { latest_counter: nextordernumber };
   const condition = { counter_name: 'tasks' };
