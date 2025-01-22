@@ -74,7 +74,6 @@ function FormComponent({ toggleModal,refreshTasks,parent_task_id,selectedTabId, 
         throw new Error(`Failed to fetch ${table_name}: ${response.status}`);
       }
       const requestedList = await response.json();
-      console.log("list name",listName);
       
       if (!excludeOtherOption.includes(listName)) {
         const other = {
