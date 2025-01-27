@@ -7,7 +7,7 @@ function LogoBox({size=80,company_website="axonator.com",task}) {
     const imgLogoSrc= `https://img.logo.dev/${company_website}?token=pk_CVR_tKaFQ0mBXPEs9bO4Pw&size=${size}`;
     const defaultLogoSrc = `https://www.pngkey.com/png/detail/212-2123771_404-error-group-does-not-exist.png`
     
-    const [logoSrc, setLogoSrc] = useState(imgLogoSrc);
+    const [logoSrc, setLogoSrc] = useState(defaultLogoSrc);
       // Function to validate a URL
     const isValidUrl = async (url) => {
         try {
@@ -16,6 +16,7 @@ function LogoBox({size=80,company_website="axonator.com",task}) {
             if (response.ok) {
                 return true;
             }else{
+                console.log(`link ${response.ok}: ${url} `);
                 return false
             }
         } catch (err) {
