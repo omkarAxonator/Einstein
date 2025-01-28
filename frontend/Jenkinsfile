@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+    
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID') // Same as backend Lambda
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_KEY') // Same as backend Lambda
+        AWS_REGION = 'ap-south-1' // Update as per your setup
+        S3_BUCKET = 'einsteinfrontend'
+    }
+    
+    stages {
+        
+        stage('Cleanup Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        
+        stage('Git Checkout') {
+            steps {
+                echo "******CHECKING OUT REPOSITORY********"
+                git url: 'https://github.com/AX-Krishnendu/Einstein.git', branch: 'main'
+            }
+        }
+        
+        
+        stage('Check Changes in Frontend Directory') {
+            steps {
+                script {
+                    // Get the list of changes in the last commit
+                    def changes = sh(script: "git diff-tree --no-commit-id --name-only -r HEAD", returnStdout: true).trim()
+                    
+                    // Check if any file in the `frontend` directory has changed
+                    if (!changes.split('\n').any { it.startsWith('frontend/') }) {
+                        echo "No changes in 'frontend' directory. Skipping deployment."
+                        currentBuild.result = 'NOT_BUILT'
+                        error('Skipping build due to no changes in frontend directory.')
+                    }
+                }
+            }
+        }
+        
+        
+        
+        
+        stage('Upload to S3') {
+            steps {
+                // No need to use withEnv here since environment variables are already defined at the top
+                sh '''
+                echo "uploading to s3"
+                cd frontend
+                aws s3 cp dist s3://$S3_BUCKET --recursive
+                echo "upload complete"
+                '''
+            }   
+        }
+    }
+}
