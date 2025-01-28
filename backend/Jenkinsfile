@@ -24,6 +24,25 @@ pipeline {
                 branch: 'main'
             }
         }
+        
+        stage('Check Changes in backend Directory') {
+            steps {
+                script {
+                    // Get the list of changes in the last commit
+                    def changes = sh(script: "git diff-tree --no-commit-id --name-only -r HEAD", returnStdout: true).trim()
+                    
+                    // Check if any file in the `frontend` directory has changed
+                    if (!changes.split('\n').any { it.startsWith('backend/') }) {
+                        echo "No changes in 'backend' directory. Skipping deployment."
+                        currentBuild.result = 'NOT_BUILT'
+                        error('Skipping build due to no changes in backend directory.')
+                    }
+                }
+            }
+        }
+        
+        
+        
 
         stage('Update .env File') {
             steps {
