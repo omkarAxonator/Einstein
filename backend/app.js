@@ -28,7 +28,7 @@ exports.handler = (event, context) => {
 
 
 // Start LOCAL server
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+//const PORT = 5000;
+//app.listen(PORT, () => {
+//  console.log(`Server running on port ${PORT}`);
+//});

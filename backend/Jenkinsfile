@@ -1,0 +1,86 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'ap-south-1'
+        LAMBDA_FUNCTION_NAME = 'einsteinBackend'
+        RDS_PASSWORD = credentials('RDS_PASSWORD')
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_KEY')
+    }
+
+    stages {
+        stage('Workspace Cleanup') {
+            steps {
+                
+                cleanWs()
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                echo "******CHECKING OUT REPOSITORY********"
+                git url: 'https://github.com/AX-Krishnendu/Einstein.git',
+                branch: 'main'
+            }
+        }
+        
+        stage('Check Changes in backend Directory') {
+            steps {
+                script {
+                    // Get the list of changes in the last commit
+                    def changes = sh(script: "git diff-tree --no-commit-id --name-only -r HEAD", returnStdout: true).trim()
+                    
+                    // Check if any file in the `frontend` directory has changed
+                    if (!changes.split('\n').any { it.startsWith('backend/') }) {
+                        echo "No changes in 'backend' directory. Skipping deployment."
+                        currentBuild.result = 'NOT_BUILT'
+                        error('Skipping build due to no changes in backend directory.')
+                    }
+                }
+            }
+        }
+        
+        
+        
+
+        stage('Update .env File') {
+            steps {
+                sh '''
+                echo "******updating .env file********"
+                sed -i "s|RDS_PASSWORD=.*|RDS_PASSWORD=${RDS_PASSWORD}|g" backend/.env
+                sed -i "s|AWS_SECRET_ACCESS_KEY =.*|AWS_SECRET_ACCESS_KEY = ${AWS_SECRET_ACCESS_KEY}|g" backend/.env
+                echo "******finished updating .env file********"
+                '''
+            }
+        }
+
+        stage('Package Lambda') {
+            steps {
+                sh '''
+                echo "****** creating zip file ********"
+                cd backend
+                zip -r ../lambda.zip .
+                cd ..
+                echo "****** zip file created ********"
+                '''
+            }
+        }
+
+        stage('Update Lambda Function') {
+            steps {
+                withEnv(["AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}", "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}", "AWS_REGION=${AWS_REGION}"]) {
+                    sh '''
+                    echo "****** updating lambda ********"
+                    aws lambda update-function-code \
+                        --function-name $LAMBDA_FUNCTION_NAME \
+                        --zip-file fileb://lambda.zip \
+                        --region $AWS_REGION
+                    '''
+                }
+            }
+        }
+    }
+
+    
+}
