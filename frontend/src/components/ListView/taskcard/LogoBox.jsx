@@ -5,7 +5,7 @@ import EditLogoModal from "./EditLogoModal";
 function LogoBox({size=80,company_website="axonator.com",task}) {
     const profile_url = task?.custom_fields?.["Profile Picture"]?.value;
     const imgLogoSrc= `https://img.logo.dev/${company_website}?token=pk_CVR_tKaFQ0mBXPEs9bO4Pw&size=${size}`;
-    const defaultLogoSrc = `https://www.pngkey.com/png/detail/212-2123771_404-error-group-does-not-exist.png`
+    const defaultLogoSrc = `/assets/no preview 1.png`
     
     const [logoSrc, setLogoSrc] = useState(defaultLogoSrc);
       // Function to validate a URL
@@ -13,10 +13,12 @@ function LogoBox({size=80,company_website="axonator.com",task}) {
         try {
             new URL(url); // Validates using URL constructor
             const response = await fetch(url, { method: "HEAD",mode: "no-cors" });
-            if (response.ok) {
-                return true;
+            if (response) {
+                const contentType = response.headers.get("Content-Type");
+                console.log("aooooo",url,contentType);
+                
+                return contentType && contentType.startsWith("image/");
             }else{
-                console.log(`link ${response.ok}: ${url} `);
                 return false
             }
         } catch (err) {

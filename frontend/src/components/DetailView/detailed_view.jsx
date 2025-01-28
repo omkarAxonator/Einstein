@@ -62,11 +62,6 @@ const columns = Array.from({ length: columnCount }, (_, index) =>
     setShowForm(!showForm);
   };
   
-
-    // Check if task_name is "root"
-  if (taskDetails.task_data < 2 || Object.keys(taskDetails)==0) {
-    return null; // Render nothing
-  }
   return (
     <div className="container pt-4 DetailedView">
       {/* Error message */}

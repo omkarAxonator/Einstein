@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TaskCard from './taskcard/taskCard';
 import FormComponent from '../form/From';
 import { getcustomFields } from '../../helper/helper';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
  
 
 const Listview = ({taskTypeCode,filtertasktype,parenntId,selectedTabId,selectedTabname}) => {
@@ -72,17 +73,21 @@ const Listview = ({taskTypeCode,filtertasktype,parenntId,selectedTabId,selectedT
   };
   
 
-  return (
-    <div className="container">
-
-      <h1>Task List</h1>
-      <button className="btn btn-primary m-3" onClick={toggleModal}>Add +</button>
-
-      {/* Loading spinner */}
-      {/* {loading && <div>Loading...</div>} */}
-
+  return loading ? 
+    (
+    <div className='container d-flex justify-content-center'>
+      <DotLottieReact
+        src="https://lottie.host/fc278a4c-abe0-4e17-9c4b-d2e06ab3ce6e/FHHmq9VFBO.lottie"
+        loop
+        autoplay
+      />
+    </div>
+    ):(
+      <div className="container">
       {/* Error message */}
       {error && <div className="alert alert-danger">{error}</div>}
+      <h1>Task List</h1>
+      <button className="btn btn-primary m-3" onClick={toggleModal}>Add +</button>
 
       {/* Task list */}
       <div className="task-list">
@@ -95,10 +100,9 @@ const Listview = ({taskTypeCode,filtertasktype,parenntId,selectedTabId,selectedT
               )
             ))}
           </ul>
-        ) : (
-          !loading && <div>No tasks found for the given task type code.</div>
-        )}
+        ):null}
       </div>
+
       {/* Modal for adding a new task */}
       {showModal && (<FormComponent toggleModal={toggleModal} refreshTasks={fetchTasks} parent_task_id={parenntId} selectedTabId={selectedTabId} selectedTabName={selectedTabname} availableCustomFields={availableCustomFields} taskToEdit={taskToEdit}/>)}
     </div>

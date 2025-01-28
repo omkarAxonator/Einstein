@@ -9,7 +9,7 @@ function titlebox({subtitle,task}) {
         trimmedWebsite = website.replace(/https?:\/\//, '').replace(/\/$/, '');
         
     } catch (error) {
-        console.log("webiste not available"); 
+        trimmedWebsite = false
     }
     
     return(

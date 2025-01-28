@@ -213,7 +213,6 @@ useEffect(() => {
       if (Object.keys(customFields).length>0) {
         try {
           customFields["newTaskId"]=newTaskId
-          console.log("custom fields",customFields);
           
           const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/tasks/addTaskCustomFields`, {
             method: "POST",
