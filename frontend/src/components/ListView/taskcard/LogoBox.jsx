@@ -4,14 +4,21 @@ import EditLogoModal from "./EditLogoModal";
 
 function LogoBox({size=80,company_website="axonator.com",task}) {
     const profile_url = task?.custom_fields?.["Profile Picture"]?.value;
-    const defaultLogoSrc = `https://img.logo.dev/${company_website}?token=pk_CVR_tKaFQ0mBXPEs9bO4Pw&size=${size}`;
+    const imgLogoSrc= `https://img.logo.dev/${company_website}?token=pk_CVR_tKaFQ0mBXPEs9bO4Pw&size=${size}`;
+    const defaultLogoSrc = `https://www.pngkey.com/png/detail/212-2123771_404-error-group-does-not-exist.png`
     
     const [logoSrc, setLogoSrc] = useState(defaultLogoSrc);
       // Function to validate a URL
-    const isValidUrl = (url) => {
+    const isValidUrl = async (url) => {
         try {
             new URL(url); // Validates using URL constructor
-            return true;
+            const response = await fetch(url, { method: "HEAD",mode: "no-cors" });
+            if (response.ok) {
+                return true;
+            }else{
+                console.log(`link ${response.ok}: ${url} `);
+                return false
+            }
         } catch (err) {
             return false;
         }
@@ -19,19 +26,18 @@ function LogoBox({size=80,company_website="axonator.com",task}) {
 
     // Check if profile_url exists and is valid
     useEffect(() => {
-        if (profile_url && isValidUrl(profile_url)) {
-            // Optional: Verify URL is accessible via fetch
-            fetch(profile_url, { method: "HEAD" })
-                .then((res) => {
-                    if (res.ok) {
-                        setLogoSrc(profile_url);
-                    }
-                })
-                .catch(() => {
-                    // If fetch fails, retain the default logoSrc
-                    setLogoSrc(defaultLogoSrc);
-                });
-        }
+        const validateAndSetLogo = async () => {
+            if (profile_url && isValidUrl(profile_url)) {
+                setLogoSrc(profile_url);
+            }
+            else if (isValidUrl(imgLogoSrc)) {
+                setLogoSrc(imgLogoSrc);
+            } else {
+                setLogoSrc(defaultLogoSrc);
+            }
+        };
+    
+        validateAndSetLogo();
     }, [profile_url]);
 
       const [isModalOpen, setModalOpen] = useState(false);

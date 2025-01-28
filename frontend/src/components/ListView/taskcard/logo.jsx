@@ -8,7 +8,7 @@ function Logo({ src, onEditClick, size}) {
         src={src}
         className="p-1 rounded-circle logo-img"
         alt="Company Logo"
-        style={{ width: size, height: size, cursor: "pointer" }}
+        style={{ width: size, height: size, cursor: "pointer",objectFit: "contain" }}
         onClick={onEditClick}
       />
     </div>

@@ -18,7 +18,8 @@ function FormComponent({ toggleModal,refreshTasks,parent_task_id,selectedTabId, 
     "parent_task_id":parent_task_id
   })
 
-  const requiredFields = ['Health','Status']
+  const requiredFields = ['Health','Status'];
+  const excludeOtherOption = ['Status','Health','Lead Type'];
 
   const [statuses, setStatuses] = useState([]); // For storing statuses list
   // const [selectedStatus, setSelectedStatus] = useState("");
@@ -72,14 +73,16 @@ function FormComponent({ toggleModal,refreshTasks,parent_task_id,selectedTabId, 
       if (!response.ok) {
         throw new Error(`Failed to fetch ${table_name}: ${response.status}`);
       }
-
       const requestedList = await response.json();
-      const other = {
-        "lookup_id":404,
-        "fk_custom_field_id":404,
-        "option":"Other"
+      
+      if (!excludeOtherOption.includes(listName)) {
+        const other = {
+          "lookup_id":404,
+          "fk_custom_field_id":404,
+          "option":"Other"
+        }
+        requestedList.push(other)
       }
-      requestedList.push(other)
       setDropdownOptions((prevalue)=>({
         ...prevalue,[listName]:requestedList
       }));
